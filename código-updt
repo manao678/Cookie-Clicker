@@ -1,0 +1,176 @@
+import pygame
+import time
+from pygame.locals import *
+from sys import exit
+
+pygame.init()
+pygame.font.init()
+
+start = time.time()
+
+x=0
+y=0
+
+largura = 1200
+altura = 600
+
+cookie = 1000000000000000
+tamanho = 240
+contador = 0
+
+# SOM
+som_click = pygame.mixer.Sound(r"C:\Users\User\Downloads\Programação\Vscode\Pygame\sons\mixkit-interface-click-hover-1127.wav")
+som_upgrade = pygame.mixer.Sound(r"C:\Users\User\Downloads\Programação\Vscode\Pygame\sons\mixkit-money-bag-drop-1989.wav")
+
+# UPGRADES
+cup1 = 0
+up1 = 0
+modup1 = 1
+valor1 = 50
+up2 = False
+cup2 = 0
+modup2 = 0
+valor2 = 200
+valor_ascend = 1000000000
+total_cookies = valor_ascend
+
+window = pygame.display.set_mode((largura, altura))
+pygame.display.set_caption("cookie clicker")
+imagem = pygame.image.load(r"C:\Users\User\Downloads\Programação\Vscode\Pygame\imagens\314331.png")
+
+area = imagem.get_rect(topleft=(100, 300))
+
+def up():
+    global cookie,modup1,valor1
+    cookie = cookie - valor1
+    modup1 += 1
+    valor1 = valor1*1.08
+
+def upg2():
+    global start,cookie,modup2,valor2
+    start = time.time()
+    cookie = cookie + modup2
+    cookie = cookie - valor2
+    valor2 = round(valor2*1.08)
+
+def ascender():
+    global cookie, cup1,up1,modup1,valor1,up2,cup2,modup2,valor2,ascendido,valor_ascend,total_cookies
+    cookie = 0
+    cup1 = 0
+    up1 = 0
+    modup1 = 1
+    valor1 = 50
+    up2 = False
+    cup2 = 0
+    modup2 = 0
+    valor2 = 200
+    valor_ascend = valor_ascend * 5
+    ascendido = True
+    total_cookies = valor_ascend
+
+
+while True:
+    if time.time() - start > 60:
+        if up2 == True:
+            upg2()
+
+    total_cookies = total_cookies - cookie
+
+    window.fill((0,0,200))
+
+    # APROXIMAÇÕES
+    if cookie >= 1000 and cookie < 1000000:
+        valor_texto = str(round(cookie / 1000.0, 1)) + 'K'
+    elif cookie >= 1000000 and cookie < 1000000000:
+        valor_texto = str(round(cookie / 1000000.0, 1)) + 'M'
+    elif cookie >= 1000000000 and cookie < 1000000000000:
+        valor_texto = str(round(cookie / 1000000000.0, 1)) + 'B'
+    elif cookie >= 1000000000000 and cookie < 1000000000000000:
+        valor_texto = str(round(cookie / 1000000000000.0, 1)) + 'T'
+    elif cookie >= 1000000000000000 and cookie < 1000000000000000000:
+        valor_texto = str(round(cookie / 1000000000000000.0, 1)) + "Q"
+    
+    # TEXTOS
+    fonte = pygame.font.SysFont("arial", 30, True, False)
+    mensagem= f"cookies = {valor_texto}"
+    texto = fonte.render(mensagem, True , (255,255,255))
+
+    fonte2 = pygame.font.SysFont("arial", 30, True, False)
+    mensagem= f"Better Click"
+    texto2 = fonte2.render(mensagem, True , (255,255,255))
+
+    fonte3 = pygame.font.SysFont("arial", 30, True, False)
+    mensagem= f"Chef"
+    texto3 = fonte2.render(mensagem, True , (255,255,255))
+
+    fonte4 = pygame.font.SysFont("arial", 30, True, False)
+    mensagem= f" Ascend "
+    texto4 = fonte2.render(mensagem, True , (255,255,255))
+    
+    fonte5 = pygame.font.SysFont("arial", 10, True, False)
+    mensagem= f"  {round(valor1)} cookies"
+    texto5 = fonte5.render(mensagem, True , (255,255,255))
+
+    fonte6 = pygame.font.SysFont("arial", 10, True, False)
+    mensagem= f"  {round(valor2)} cookies"
+    texto6 = fonte6.render(mensagem, True , (255,255,255))
+
+    fonte7 = pygame.font.SysFont("arial", 30, True, False)
+    mensagem= f"               Upgrades: "
+    texto7 = fonte7.render(mensagem, True , (255,255,255))
+
+    interface = pygame.draw.rect(window, (0,0,64), (770,0,430,600))
+    interface2 = pygame.draw.rect(window, (0,0,128), (0,0,770,120))
+    upgrade = pygame.draw.rect(window, (0,255,0), (1130,60,20,20))
+    upgrade2 = pygame.draw.rect(window, (0,255,0), (1130,95,20,20))
+    ascend = pygame.draw.rect(window, (64,0,64), (800,545,350,45))
+
+
+    pos = pygame.mouse.get_pos()
+    #print(pos)
+
+    for event in pygame.event.get():
+        if event.type == QUIT:
+            pygame.quit()
+            exit()
+
+        # BOTÕES
+
+        if event.type == MOUSEBUTTONDOWN:
+            if pos[0] < 1149 and pos[0] > 801 and pos[1] <588 and pos[1] > 547:
+                if total_cookies <= 0:
+                    ascender()
+
+        if event.type == MOUSEBUTTONDOWN:
+            if pos[0] < 1150 and pos[0] > 1129 and pos[1] < 115 and pos[1] > 93:
+                if cookie >= valor2:
+                    cookie = cookie - 200
+                    up2 = True
+                    modup2 = modup2 + 50
+                    cup2 += 1
+                    valor2 = valor2*1.09
+                    som_upgrade.play()
+                        
+        if event.type == MOUSEBUTTONDOWN:
+            if pos[0] <  1150 and pos[0] > 1130 and pos[1] < 80 and pos[1] > 60:    
+                if cookie >= valor1:
+                    som_upgrade.play()
+                    up()
+
+        if event.type == MOUSEBUTTONUP:
+            if pos[0] < 338 and pos[0] > 88 and pos[1] > 167 and pos[1] < 408 :
+                som_click.play()
+                cookie += modup1
+
+
+    window.blit(imagem, (20, 100))
+    window.blit(texto7, (800,10))
+    window.blit(texto6, (800,120))
+    window.blit(texto5, (800, 80))
+    window.blit(texto4, (800,550))
+    window.blit(texto3, (800, 90))
+    window.blit(texto2, (800, 50))
+    window.blit(texto,  (10, 550)) 
+
+
+    pygame.display.update()
