@@ -1,0 +1,411 @@
+import pygame
+import time
+from pygame.locals import *
+from sys import exit
+from time import sleep 
+
+pygame.init()
+pygame.font.init()
+
+start = time.time()
+
+x=0
+y=0
+
+largura = 1200 
+altura = 600
+
+cookie = 465400
+tamanho = 240
+contador = 0
+
+# SOM
+som_click = pygame.mixer.Sound(r"C:\Users\User\Downloads\Programação\Vscode\Pygame\sons\mixkit-interface-click-hover-1127.wav")
+som_upgrade = pygame.mixer.Sound(r"C:\Users\User\Downloads\Programação\Vscode\Pygame\sons\mixkit-money-bag-drop-1989.wav")
+
+# UPGRADES 
+cup1 = 0      
+modup1 = 1  
+valor1 = 50
+
+up2 = False
+cup2 = 0
+modup2 = 0
+valor2 = 400
+
+valor_ascend = 1000000000
+ascendido = False
+
+valor3 = 5000
+up3 = False
+modup3 = 0
+cup3 = 0
+
+valor4 = 60000
+modup4 = 0
+up4 = False
+cup4 = 0
+
+valor5 = 400000
+modup5 = 0
+up5 = False
+cup5 = 0
+
+cps = 0
+teste = 10
+
+window = pygame.display.set_mode((largura, altura))
+pygame.display.set_caption("cookie clicker")
+imagem = pygame.image.load(r"C:\Users\User\Downloads\Programação\Vscode\Pygame\imagens\314331.png")
+cursor = pygame.image.load(r"C:\Users\User\Downloads\Programação\Vscode\Pygame\imagens\R.png")
+senhora = pygame.image.load(r"C:\Users\User\Downloads\Programação\Vscode\Pygame\imagens\idosa.png")
+drill = pygame.image.load(r"C:\Users\User\Downloads\Programação\Vscode\Pygame\imagens\drill.png")
+summoner = pygame.image.load(r"C:\Users\User\Downloads\Programação\Vscode\Pygame\imagens\summoner.png")
+portal = pygame.image.load(r"C:\Users\User\Downloads\Programação\Vscode\Pygame\imagens\portal.png")
+portal = pygame.transform.scale(portal, (32,48))
+summoner = pygame.transform.scale(summoner, (32,48))
+cursor = pygame.transform.scale(cursor, (32,32))
+senhora = pygame.transform.scale(senhora, (64,64))
+drill = pygame.transform.scale(drill, (32,32))
+
+area = imagem.get_rect(topleft=(100, 300))
+
+def up():
+    global cookie,modup1,valor1
+    cookie = cookie - valor1
+    modup1 += 1
+    valor1 = valor1*1.1
+
+def upg2():
+    global start,cookie
+    start = time.time()
+    cookie = cookie + modup2
+
+def upg3():
+    global start,cookie
+    start = time.time()
+    cookie += modup3
+
+def upg4():
+    global start,cookie
+    start = time.time()
+    cookie += modup4
+
+def upg5():
+    global start,cookie
+    start = time.time()
+    cookie += modup5
+
+def ascender():
+    global cookie, cup1,up1,modup1,valor1,cup2,modup2,valor2,ascendido,valor_ascend,valor3,valor4,up4,up2,valor5,modup5,up5,cup5,modup4,cup4,up3,modup3,cup3
+    a = cookie
+    cookie = 0
+
+    cup1 = 0
+    modup1 = 1
+    valor1 = 50
+    
+    up2 = False
+    cup2 = 0
+    modup2 = 0
+    valor2 = 400
+
+    valor_ascend = valor_ascend * 5
+    ascendido = True
+
+    valor3 = 5000
+    up3 = False
+    modup3 = 0
+    cup3 = 0
+
+    valor4 = 60000  
+    modup4 = 0
+    up4 = False
+    cup4 = 0
+
+
+    valor5 = 400000
+    modup5 = 0
+    up5 = False
+    cup5 = 0
+
+while True:
+    if time.time() - start >= 1:
+        if up2 == True:
+            upg2()
+        if up3 == True:
+            upg3()
+        if up4 == True:
+            upg4()
+        if up5 == True:
+            upg5()
+
+    window.fill((0,0,200))
+
+    cps = modup2 + modup3 + modup4 + modup5
+
+    # APROXIMAÇÕES
+    if cookie >= 0 and cookie < 1000:
+        valor_texto = round(cookie)
+    elif cookie >= 1000 and cookie < 1000000:
+        valor_texto = str(round(cookie / 1000.0, 1)) + 'K'
+    elif cookie >= 1000000 and cookie < 1000000000:
+        valor_texto = str(round(cookie / 1000000.0, 1)) + 'M'
+    elif cookie >= 1000000000 and cookie < 1000000000000:
+        valor_texto = str(round(cookie / 1000000000.0, 1)) + 'B'
+    elif cookie >= 1000000000000 and cookie < 1000000000000000:
+        valor_texto = str(round(cookie / 1000000000000.0, 1)) + 'Tri'
+    elif cookie >= 1000000000000000 and cookie < 1000000000000000000:
+        valor_texto = str(round(cookie / 1000000000000000.0, 1)) + "Qua"
+    elif cookie >= 1000000000000000000 and cookie < 1000000000000000000000:
+        valor_texto = str(round(cookie / 1000000000000000000.0, 1)) + "Qui"
+    
+
+    if valor1 >= 0 and valor1 < 1000:
+        valor_preço = round(valor1)
+    elif valor1 >= 1000 and valor1 < 1000000:
+        valor_preço = str(round(valor1 / 1000.0, 1)) + 'K'
+    elif valor1 >= 1000000 and valor1 < 1000000000:
+        valor_preço = str(round(valor1 / 1000000.0, 1)) + 'M'
+    elif valor1 >= 1000000000 and valor1 < 1000000000000:
+        valor_preço = str(round(valor1 / 1000000000.0, 1)) + 'B'
+    elif valor1 >= 1000000000000 and valor1 < 1000000000000000:
+        valor_preço = str(round(valor1 / 1000000000000.0, 1)) + 'T'
+    elif valor1 >= 1000000000000000 and valor1 < 1000000000000000000:
+        valor_preço = str(round(valor1 / 1000000000000000.0, 1)) + "Q"
+
+    if valor2 >= 0 and valor2 < 1000:
+        valor_preço1 = round(valor2)
+    elif valor2 >= 1000 and valor2 < 1000000:
+        valor_preço1 = str(round(valor2 / 1000.0, 1)) + 'K'
+    elif valor2 >= 1000000 and valor2 < 1000000000:
+        valor_preço1 = str(round(valor2 / 1000000.0, 1)) + 'M'
+    elif valor2 >= 1000000000 and valor2 < 1000000000000:
+        valor_preço1 = str(round(valor2 / 1000000000.0, 1)) + 'B'
+    elif valor2 >= 1000000000000 and valor2 < 1000000000000000:
+        valor_preço1 = str(round(valor2 / 1000000000000.0, 1)) + 'T'
+    elif valor2 >= 1000000000000000 and valor2 < 1000000000000000000:
+        valor_preço1 = str(round(valor2 / 1000000000000000.0, 1)) + "Q"
+
+    if valor3 >= 0 and valor3 < 1000:
+        valor_preço2 = round(valor3)
+    if valor3 >= 1000 and valor3 < 1000000:
+        valor_preço2 = str(round(valor3 / 1000.0, 1)) + 'K'
+    elif valor3 >= 1000000 and valor3 < 1000000000:
+        valor_preço2 = str(round(valor3 / 1000000.0, 1)) + 'M'
+    elif valor3 >= 1000000000 and valor3 < 1000000000000:
+        valor_preço2 = str(round(valor3 / 1000000000.0, 1)) + 'B'
+    elif valor3 >= 1000000000000 and valor3 < 1000000000000000:
+        valor_preço2 = str(round(valor3 / 1000000000000.0, 1)) + 'T'
+    elif valor3 >= 1000000000000000 and valor3 < 1000000000000000000:
+        valor_preço2 = str(round(valor3 / 1000000000000000.0, 1)) + "Q"
+
+    if valor4 >= 0 and valor4 < 1000:
+        valor_preço3 = round(valor4)
+    if valor4 >= 1000 and valor4 < 1000000:
+        valor_preço3 = str(round(valor4 / 1000.0, 1)) + 'K'
+    elif valor4 >= 1000000 and valor4 < 1000000000:
+        valor_preço3 = str(round(valor4 / 1000000.0, 1)) + 'M'
+    elif valor4 >= 1000000000 and valor4 < 1000000000000:
+        valor_preço3 = str(round(valor4 / 1000000000.0, 1)) + 'B'
+    elif valor4 >= 1000000000000 and valor4 < 1000000000000000:
+        valor_preço3 = str(round(valor4 / 1000000000000.0, 1)) + 'T'
+    elif valor4 >= 1000000000000000 and valor4 < 1000000000000000000:
+        valor_preço3 = str(round(valor4 / 1000000000000000.0, 1)) + "Q"
+
+    if valor5 >= 0 and valor5 < 1000:
+        valor_preço4 = round(valor5)
+    if valor5 >= 1000 and valor5 < 1000000:
+        valor_preço4 = str(round(valor5 / 1000.0, 1)) + 'K'
+    elif valor5 >= 1000000 and valor5 < 1000000000:
+        valor_preço4 = str(round(valor5 / 1000000.0, 1)) + 'M'
+    elif valor5 >= 1000000000 and valor5 < 1000000000000:
+        valor_preço4 = str(round(valor5 / 1000000000.0, 1)) + 'B'
+    elif valor5 >= 1000000000000 and valor5 < 1000000000000000:
+        valor_preço4 = str(round(valor5 / 1000000000000.0, 1)) + 'T'
+    elif valor5 >= 1000000000000000 and valor5 < 1000000000000000000:
+        valor_preço4 = str(round(valor5 / 1000000000000000.0, 1)) + "Q"
+
+    if cps >= 0 and cps < 1000:
+        valor_cps = round(cps)
+    if cps >= 1000 and cps < 1000000:
+        valor_cps = str(round(cps / 1000.0, 1)) + 'K'
+    elif cps >= 1000000 and cps < 1000000000:
+        valor_cps = str(round(cps / 1000000.0, 1)) + 'M'
+    elif cps >= 1000000000 and cps < 1000000000000:
+        valor_cps = str(round(cps / 1000000000.0, 1)) + 'B'
+    elif cps >= 1000000000000 and cps < 1000000000000000:
+        valor_cps = str(round(cps / 1000000000000.0, 1)) + 'T'
+    elif cps >= 1000000000000000 and cps < 1000000000000000000:
+        valor_cps = str(round(cps / 1000000000000000.0, 1)) + "Q"
+        
+    # TEXTOS
+    fonte = pygame.font.SysFont("arial", 30, True, False)
+    mensagem= f"cookies = {valor_texto}"
+    texto = fonte.render(mensagem, True , (255,255,255))
+
+    fonte2 = pygame.font.SysFont("arial", 30, True, False)
+    mensagem= f"Melhor Click"
+    texto2 = fonte2.render(mensagem, True , (255,255,255))
+
+    fonte3 = pygame.font.SysFont("arial", 30, True, False)
+    mensagem= f"Idosas"
+    texto3 = fonte2.render(mensagem, True , (255,255,255))
+
+    fonte4 = pygame.font.SysFont("arial", 30, True, False)
+    mensagem= f" Ascend "
+    texto4 = fonte2.render(mensagem, True , (255,255,255))
+    
+    fonte5 = pygame.font.SysFont("arial", 10, True, False)
+    mensagem= f"  {(valor_preço)} cookies"
+    texto5 = fonte5.render(mensagem, True , (255,255,255))
+
+    fonte6 = pygame.font.SysFont("arial", 10, True, False)
+    mensagem= f"  {(valor_preço1)} cookies"
+    texto6 = fonte6.render(mensagem, True , (255,255,255))
+
+    fonte7 = pygame.font.SysFont("arial", 30, True, False)
+    mensagem= f"               Upgrades: "
+    texto7 = fonte7.render(mensagem, True , (255,255,255))
+
+    fonte8 = pygame.font.SysFont("arial", 30, True, False)
+    mensagem= f"Mineradora"
+    texto8 = fonte8.render(mensagem, True , (255,255,255))
+
+    fonte9 = pygame.font.SysFont("arial", 10, True, False)
+    mensagem= f"  {(valor_preço2)} cookies"
+    texto9 = fonte9.render(mensagem, True , (255,255,255))
+
+    fonte10 = pygame.font.SysFont("arial", 10, True, False)
+    mensagem= f"  {(valor_preço3)} cookies"
+    texto10 = fonte10.render(mensagem, True , (255,255,255))
+
+    fonte11 = pygame.font.SysFont("arial", 30, True, False)
+    mensagem= f"Summoner"
+    texto11 = fonte11.render(mensagem, True , (255,255,255))
+
+    fonte12 = pygame.font.SysFont("arial", 30, True, False)
+    mensagem= f"Portal"
+    texto12 = fonte12.render(mensagem, True , (255,255,255))
+
+    fonte13 = pygame.font.SysFont("arial", 10, True, False)
+    mensagem= f"  {(valor_preço4)} cookies"
+    texto13 = fonte13.render(mensagem, True , (255,255,255))
+
+    fonte14 = pygame.font.SysFont("arial", 20, True, False)
+    mensagem= f"Por segundo: {(valor_cps)} "
+    texto14 = fonte14.render(mensagem, True , (255,255,255))
+
+    fonte15 = pygame.font.SysFont("arial", 20, True, False)
+    mensagem= f" +{(modup1)} "
+    texto15 = fonte15.render(mensagem, True , (255,255,255))
+
+    interface = pygame.draw.rect(window, (0,0,64), (750,0,500,600))
+    interface2 = pygame.draw.rect(window, (0,0,128), (0,0,750,150))
+    upgrade = pygame.draw.rect(window, (0,255,0), (1130,60,20,20))
+    upgrade2 = pygame.draw.rect(window, (0,255,0), (1130,105,20,20))
+    upgrade3 = pygame.draw.rect(window, (0,255,0), (1130,150,20,20))
+    upgrade4 = pygame.draw.rect(window,(0,255,0), (1130, 195,20,20))
+    upgrade5 = pygame.draw.rect(window,(0,255,0), (1130, 240,20,20))
+    ascend = pygame.draw.rect(window, (64,0,64), (1000,545,150,45))
+
+
+    pos = pygame.mouse.get_pos()
+    #print(pos)
+
+    for event in pygame.event.get():
+        if event.type == QUIT:
+            pygame.quit()
+            exit()
+
+        # BOTÕES  
+
+        if event.type == MOUSEBUTTONDOWN:                   # 45              # 45  # Portal
+            if pos[0] < 1150 and  pos[0] > 1130 and pos[1] < 260 and pos[1] > 240:  
+                if cookie >= valor5:
+                    cookie = cookie - valor5
+                    up5 = True
+                    modup5 = modup5 + 38200
+                    valor5 = valor5*1.2
+                    som_upgrade.play()
+        
+
+        if event.type == MOUSEBUTTONDOWN:                   # 45              # 45  # SUMMONER
+            if pos[0] < 1150 and  pos[0] > 1130 and pos[1] < 215 and pos[1] > 195:  
+                if cookie >= valor4:
+                    cookie = cookie - valor4
+                    up4 = True
+                    modup4 = modup4 + 4300
+                    valor4 = valor4*1.2
+                    som_upgrade.play()
+        
+        if event.type == MOUSEBUTTONDOWN:                                           # MINERADORA
+            if pos[0] < 1150 and pos[0] > 1130 and pos[1] < 170 and pos[1] > 150:   
+                if cookie >= valor3:
+                    cookie = cookie - valor3
+                    up3 = True
+                    modup3 = modup3 + 200
+                    valor3 = valor3*1.2
+                    som_upgrade.play()
+        
+
+        if event.type == MOUSEBUTTONDOWN:                                           # ASCENDER
+            if pos[0] < 1150 and pos[0] > 1000 and pos[1] <590 and pos[1] > 545:      
+                if cookie >= valor_ascend:
+                    ascender()
+
+        if event.type == MOUSEBUTTONDOWN:                                           # IDOSAS                
+            if pos[0] < 1150 and pos[0] > 1130 and pos[1] < 125 and pos[1] > 105:   
+                if cookie >= valor2:
+                    cookie = cookie - valor2
+                    up2 = True
+                    modup2 = modup2 + 20
+                    valor2 = valor2*1.2
+                    som_upgrade.play()
+                        
+        if event.type == MOUSEBUTTONDOWN:                                           # CLICK
+            if pos[0] <  1150 and pos[0] > 1130 and pos[1] < 80 and pos[1] > 60:    
+                if cookie >= valor1:
+                    som_upgrade.play()
+                    up()
+
+        if event.type == MOUSEBUTTONUP:                                             # COOKIE
+            if pos[0] < 338 and pos[0] > 88 and pos[1] > 167 and pos[1] < 408 :
+                som_click.play()
+                cookie += modup1
+
+    window.blit(portal,  (765, 235))   # Portal img
+    window.blit(drill,   (765, 145))   # Mineradora img
+    window.blit(senhora, (750,  80))   # Idosa img
+    window.blit(cursor,  (763 , 55))   # Click img
+    window.blit(imagem,  (20, 100 ))   # Cookie img
+    window.blit(summoner,(765,180 ))   # Summoner img
+    window.blit(texto13, (800,265 ))   # Preço Portal
+    window.blit(texto12, (800,235 ))   # Portal
+    window.blit(texto10, (800,220 ))   # Preço Summoner
+    window.blit(texto11, (800,190 ))   # Summoner 
+    window.blit(texto9,  (800, 170))   # Preço Mineradora
+    window.blit(texto8,  (800, 140))   # Mineradora
+    window.blit(texto7,  (800,  10))   # Upgrades
+    window.blit(texto4,  (1010,550))   # Ascend
+    window.blit(texto6,  (800, 125))   # Preço idosas
+    window.blit(texto3,  (800,  95))   # Idosas
+    window.blit(texto5,  (800,  80))   # Preço  Click
+    window.blit(texto2,  (800,  50))   # Click
+    window.blit(texto14, (10, 530 ))   # Cps 
+    window.blit(texto,   (10,  550))   # Cookie
+    if event.type == MOUSEBUTTONUP:                                             # COOKIE
+        if pos[0] < 338 and pos[0] > 88 and pos[1] > 167 and pos[1] < 408 :
+            window.blit(texto15, (pos[0], pos[1]-teste))
+
+
+
+    pygame.display.update()
+
+    # Ascender                  ✅
+    # Arvore de Habilidades     
+    # 5 upgrades                ✅
+    # Cookie dourado            
+    # mudar os if para case
+    # cps                       ✅
+    # cookie per click          ✅
